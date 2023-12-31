@@ -16,11 +16,19 @@ class IndexPageTest extends DuskTestCase
         });
     }
 
+    public function test_index_page_title_is_contact_form(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/');
+            $browser->assertTitle('Contact Form');
+        });
+    }
+
     public function test_index_page_has_h1_in_header(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
-            $browser->assertSeeIn('header h1', 'Contact Form');
+            $this->assertEquals('Contact Form', $browser->text('header h1'));
         });
     }
 
@@ -37,7 +45,7 @@ class IndexPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
-            $browser->assertSeeIn('h2', 'お問い合わせ');
+            $this->assertEquals('お問い合わせ', $browser->text('h2'));
         });
     }
 
@@ -56,6 +64,8 @@ class IndexPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
             $browser->assertInputPresent('name');
+            $browser->assertAttribute('form input[name="name"]', 'type', 'text');
+            $browser->assertAttribute('form input[name="name"]', 'placeholder', 'テスト太郎');
             $browser->assertInputValue('name', '');
         });
     }
@@ -65,6 +75,8 @@ class IndexPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
             $browser->assertInputPresent('email');
+            $browser->assertAttribute('form input[name="email"]', 'type', 'email');
+            $browser->assertAttribute('form input[name="email"]', 'placeholder', 'test@example.com');
             $browser->assertInputValue('email', '');
         });
     }
@@ -74,6 +86,8 @@ class IndexPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
             $browser->assertInputPresent('tel');
+            $browser->assertAttribute('form input[name="tel"]', 'type', 'tel');
+            $browser->assertAttribute('form input[name="tel"]', 'placeholder', '09012345678');
             $browser->assertInputValue('tel', '');
         });
     }
@@ -83,6 +97,7 @@ class IndexPageTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
             $browser->assertInputPresent('content');
+            $browser->assertAttribute('form textarea[name="content"]', 'placeholder', '資料をいただきたいです');
             $browser->assertInputValue('content', '');
         });
     }
@@ -91,8 +106,7 @@ class IndexPageTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
-            $browser->assertPresent('button');
-            $browser->assertValue('button', '送信');
+            $this->assertEquals('送信', $browser->text('form button'));
         });
     }
 
@@ -105,7 +119,7 @@ class IndexPageTest extends DuskTestCase
         });
     }
 
-    public function test_index_page_has_no_error_messages(): void
+    public function test_index_page_has_not_error_messages(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
@@ -150,17 +164,19 @@ class IndexPageTest extends DuskTestCase
         });
     }
 
-    public function test_email_textbox_is_invalid(): void
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/');
-            $email = 'a';
-            $browser->type('email', $email);
-            $browser->press('送信');
-            $browser->assertSee('有効なメールアドレス形式を入力してください');
-            $browser->assertInputValue('email', $email);
-        });
-    }
+    // ブラウザがメールアドレスの形式を検証するので
+    // press('送信')で遷移しない。
+    // public function test_email_textbox_is_invalid(): void
+    // {
+    //     $this->browse(function (Browser $browser) {
+    //         $browser->visit('/');
+    //         $email = 'a';
+    //         $browser->type('email', $email);
+    //         $browser->press('送信');
+    //         $browser->assertSee('有効なメールアドレス形式を入力してください');
+    //         $browser->assertInputValue('email', $email);
+    //     });
+    // }
 
     public function test_email_textbox_is_too_long(): void
     {
@@ -219,6 +235,30 @@ class IndexPageTest extends DuskTestCase
         });
     }
 
+    public function test_tel_textbox_is_negative_integer(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/');
+            $tel = '-123456789';
+            $browser->type('tel', $tel);
+            $browser->press('送信');
+            $browser->assertSee('電話番号を10桁から11桁の間で入力してください');
+            $browser->assertInputValue('tel', $tel);
+        });
+    }
+
+    public function test_tel_textbox_is_decimal_integer(): void
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/');
+            $tel = '12345678.9';
+            $browser->type('tel', $tel);
+            $browser->press('送信');
+            $browser->assertSee('電話番号を10桁から11桁の間で入力してください');
+            $browser->assertInputValue('tel', $tel);
+        });
+    }
+
     public function test_content_textbox_fills_old_value_when_error_occurs(): void
     {
         $this->browse(function (Browser $browser) {
@@ -235,10 +275,10 @@ class IndexPageTest extends DuskTestCase
             $browser->visit('/');
             $browser->type('name', 'a');
             $browser->type('email', 'b@c');
-            $browser->type('tel', '01234567890');
+            $browser->type('tel', '0123456789');
             $browser->type('content', 'd');
             $browser->press('送信');
-            $browser->assertRouteIs('/contacts/confirm');
+            $browser->assertPathIs('/contacts/confirm');
         });
     }
 }
