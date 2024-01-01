@@ -269,7 +269,7 @@ class IndexPageTest extends DuskTestCase
         });
     }
 
-    public function test_moves_to_next_page_if_all_inputs_are_filled(): void
+    public function test_moves_to_next_page_when_all_inputs_are_filled(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/');
