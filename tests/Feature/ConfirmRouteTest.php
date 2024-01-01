@@ -8,7 +8,13 @@ use Tests\TestCase;
 
 class ConfirmRouteTest extends TestCase
 {
-    public function test_invalid_if_params_are_empty(): void
+    public function test_method_not_allowed_when_method_is_get(): void
+    {
+        $response = $this->get('/contacts/confirm');
+        $response->assertMethodNotAllowed();
+    }
+
+    public function test_invalid_when_params_are_empty(): void
     {
         $response = $this->post('/contacts/confirm');
         $response->assertRedirect('/');
@@ -37,7 +43,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'tel']);
     }
 
-    public function test_only_tel_is_valid_if_tel_is_10_digits(): void
+    public function test_only_tel_is_valid_when_tel_is_10_digits(): void
     {
         $params = [
             'tel' => str_repeat('0', 10),
@@ -48,7 +54,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email']);
     }
 
-    public function test_only_tel_is_valid_if_tel_is_11_digits(): void
+    public function test_only_tel_is_valid_when_tel_is_11_digits(): void
     {
         $params = [
             'tel' => str_repeat('0', 11),
@@ -59,7 +65,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email']);
     }
 
-    public function test_invalid_if_name_is_too_long(): void
+    public function test_invalid_when_name_is_too_long(): void
     {
         $params = [
             'name' => str_repeat('a', 256),
@@ -69,7 +75,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email', 'tel']);
     }
 
-    public function test_invalid_if_email_is_not_email(): void
+    public function test_invalid_when_email_is_not_email(): void
     {
         $params = [
             'email' => 'a',
@@ -79,7 +85,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email', 'tel']);
     }
 
-    public function test_invalid_if_email_is_too_long(): void
+    public function test_invalid_when_email_is_too_long(): void
     {
         $params = [
             'email' => str_repeat('a', 254) . '@a',
@@ -89,7 +95,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email', 'tel']);
     }
 
-    public function test_invalid_if_tel_is_not_numeric(): void
+    public function test_invalid_when_tel_is_not_numeric(): void
     {
         $params = [
             'tel' => 'a',
@@ -99,7 +105,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email', 'tel']);
     }
 
-    public function test_invalid_if_tel_is_too_short(): void
+    public function test_invalid_when_tel_is_too_short(): void
     {
         $params = [
             'tel' => str_repeat('0', 9),
@@ -109,7 +115,7 @@ class ConfirmRouteTest extends TestCase
         $response->assertInvalid(['name', 'email', 'tel']);
     }
 
-    public function test_invalid_if_tel_is_too_long(): void
+    public function test_invalid_when_tel_is_too_long(): void
     {
         $params = [
             'tel' => str_repeat('0', 12),
@@ -117,11 +123,5 @@ class ConfirmRouteTest extends TestCase
         $response = $this->post('/contacts/confirm', $params);
         $response->assertRedirect('/');
         $response->assertInvalid(['name', 'email', 'tel']);
-    }
-
-    public function test_method_not_allowed_if_method_is_get(): void
-    {
-        $response = $this->get('/contacts/confirm');
-        $response->assertMethodNotAllowed();
     }
 }

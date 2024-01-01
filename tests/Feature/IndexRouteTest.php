@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class IndexRouteTest extends TestCase
 {
-    public function test_returns_ok_if_method_is_get(): void
+    public function test_returns_ok_when_method_is_get(): void
     {
         $response = $this->get('/');
         $response->assertOk();
@@ -20,7 +20,7 @@ class IndexRouteTest extends TestCase
         $response->assertValid();
     }
 
-    public function test_method_not_allowed_if_method_is_post(): void
+    public function test_method_not_allowed_when_method_is_post(): void
     {
         $response = $this->post('/');
         $response->assertMethodNotAllowed();
