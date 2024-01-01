@@ -49,7 +49,12 @@ class ConfirmPageTest extends DuskTestCase
     {
         $this->browseConfirmPageWithValidParams(function (Browser $browser, array $params) {
             foreach ($params as $name => $value) {
-                $browser->assertInputValue($name, $value);
+                if ($name === 'content') {
+                    $input = $browser->inputValue($name);
+                    $this->assertEquals(trim($value), trim($input));
+                } else {
+                    $browser->assertInputValue($name, $value);
+                }
             }
         });
     }

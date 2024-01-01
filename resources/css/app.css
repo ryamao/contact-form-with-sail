@@ -4,10 +4,10 @@
 
 @layer components {
     .text-box {
-        @apply border border-gray-300 rounded-sm w-full p-1;
+        @apply border border-gray-300 rounded w-full p-1;
     }
 
     .required {
-        @apply bg-gray-100 text-gray-400 px-1 py-0.5 rounded;
+        @apply bg-gray-100 text-gray-400 px-1 py-0.5 rounded whitespace-nowrap;
     }
 }

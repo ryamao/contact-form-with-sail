@@ -1,108 +1,78 @@
-<!DOCTYPE html>
-<html lang="ja">
+<x-app-layout subTitle="お問い合わせ">
+    <form action="/contacts/confirm" method="post">
+        @csrf
+        <div class="grid grid-rows-[repeat(3,5.5rem)_12rem] sm:w-11/12 sm:max-w-screen-md sm:mx-auto sm:grid-cols-[auto_minmax(0,1fr)] sm:grid-rows-[repeat(3,4rem)_12rem]">
+            <div class="max-sm:space-y-0.5 sm:grid sm:grid-cols-subgrid sm:col-span-2 sm:grid-rows-subgrid">
+                <div class="sm:mr-10">
+                    <label for="input-name">
+                        <span>
+                            <span class="mr-1">お名前</span>
+                            <span class="required">必須</span>
+                        </span>
+                    </label>
+                </div>
+                <div>
+                    <div>
+                        <input id="input-name" type="text" name="name" placeholder="テスト太郎" value="{{ old('name') }}" class="text-box" />
+                    </div>
+                    @error('name')
+                    <div class="text-sm text-red-600 mt-0.5">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Form</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
+            <div class="max-sm:space-y-0.5 sm:grid sm:grid-cols-subgrid sm:col-span-2 sm:grid-rows-subgrid">
+                <div class="sm:mr-10">
+                    <label for="input-email">
+                        <span>
+                            <span class="mr-1">メールアドレス</span>
+                            <span class="required">必須</span>
+                        </span>
+                    </label>
+                </div>
+                <div>
+                    <div>
+                        <input id="input-email" type="email" name="email" placeholder="test@example.com" value="{{ old('email') }}" class="text-box" />
+                    </div>
+                    @error('email')
+                    <div class="text-sm text-red-600 mt-0.5">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
 
-<body>
-    <header>
-        <div class="bg-black text-white">
-            <div class="max-w-screen-md mx-auto">
-                <h1 class="text-2xl p-4">
-                    <a href="/">Contact Form</a>
-                </h1>
+            <div class="max-sm:space-y-0.5 sm:grid sm:grid-cols-subgrid sm:col-span-2 sm:grid-rows-subgrid">
+                <div class="sm:mr-10">
+                    <label for="input-tel">
+                        <span>
+                            <span class="mr-1">電話番号</span>
+                            <span class="required">必須</span>
+                        </span>
+                    </label>
+                </div>
+                <div>
+                    <div>
+                        <input id="input-tel" type="tel" name="tel" placeholder="09012345678" value="{{ old('tel') }}" class="text-box" />
+                    </div>
+                    @error('tel')
+                    <div class="text-sm text-red-600 mt-0.5">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="max-sm:space-y-0.5 sm:grid sm:grid-cols-subgrid sm:col-span-2 sm:grid-rows-subgrid">
+                <div class="sm:mr-10">
+                    <label for="input-content">
+                        <span>お問い合わせ内容</span>
+                    </label>
+                </div>
+                <div class="h-full">
+                    <textarea id="input-content" name="content" placeholder="資料をいただきたいです" class="text-box h-full appearance-none">{{ old('content') }}</textarea>
+                </div>
             </div>
         </div>
-    </header>
 
-    <main>
-        <form action="/contacts/confirm" method="post">
-            @csrf
-            <div class="mx-4 sm:mx-0">
-                <div class="my-4 sm:my-8">
-                    <h2 class="text-xl font-bold text-center">お問い合わせ</h2>
-                </div>
-
-                <div class="sm:w-4/5 sm:max-w-screen-sm sm:mx-auto sm:grid sm:grid-cols-[1fr_2fr] sm:grid-rows-[1fr_1fr_1fr_3fr]">
-                    <div class="space-y-0.5 sm:grid sm:grid-cols-subgrid sm:grid-rows-subgrid sm:col-span-2">
-                        <div>
-                            <label for="input-name">
-                                <div class="space-x-1">
-                                    <span>お名前</span>
-                                    <span class="required">必須</span>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="h-14 sm:h-16">
-                            <div>
-                                <input id="input-name" type="text" name="name" placeholder="テスト太郎" value="{{ old('name') }}" class="text-box" />
-                            </div>
-                            @error('name')
-                            <div class="text-sm text-red-600 sm:mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="space-y-0.5 sm:grid sm:grid-cols-subgrid sm:grid-rows-subgrid sm:col-span-2">
-                        <div>
-                            <label for="input-email">
-                                <div class="space-x-1">
-                                    <span>メールアドレス</span>
-                                    <span class="required">必須</span>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="h-14">
-                            <div>
-                                <input id="input-email" type="email" name="email" placeholder="test@example.com" value="{{ old('email') }}" class="text-box" />
-                            </div>
-                            @error('email')
-                            <div class="text-sm text-red-600 sm:mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="space-y-1 sm:grid sm:grid-cols-subgrid sm:grid-rows-subgrid sm:col-span-2">
-                        <div>
-                            <label for="input-tel">
-                                <div class="space-x-1">
-                                    <span>電話番号</span>
-                                    <span class="required">必須</span>
-                                </div>
-                            </label>
-                        </div>
-                        <div class="h-14">
-                            <div>
-                                <input id="input-tel" type="tel" name="tel" placeholder="09012345678" value="{{ old('tel') }}" class="text-box" />
-                            </div>
-                            @error('tel')
-                            <div class="text-sm text-red-600 sm:mt-1">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <div class="space-y-1 sm:grid sm:grid-cols-subgrid sm:grid-rows-subgrid sm:col-span-2">
-                        <div>
-                            <label for="input-content">
-                                <span>お問い合わせ内容</span>
-                            </label>
-                        </div>
-                        <div class="h-40 sm:h-full">
-                            <textarea id="input-content" name="content" placeholder="資料をいただきたいです" class="text-box h-full">{{ old('content') }}</textarea>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center mt-8">
-                    <button class="bg-black text-white px-20 py-2 rounded">送信</button>
-                </div>
-            </div>
-        </form>
-    </main>
-</body>
-
-</html>
+        <div class="text-center max-sm:my-12 mt-8">
+            <button class="bg-black text-white px-20 py-2 rounded">送信</button>
+        </div>
+    </form>
+</x-app-layout>
