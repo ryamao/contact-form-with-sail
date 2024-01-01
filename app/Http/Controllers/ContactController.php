@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
-use Tests\TestData;
 
 class ContactController extends Controller
 {
@@ -40,15 +39,15 @@ class ContactController extends Controller
         return view('confirm', $request->only(['name', 'email', 'tel', 'content']));
     }
 
-    public function store(Request $request): View|RedirectResponse|Response
+    public function store(Request $request): View|RedirectResponse
     {
         $validator = Validator::make($request->all(), self::RULES, self::MESSAGES);
         if ($validator->fails()) {
             return redirect('/');
         }
 
-        // TODO お問い合わせ内容をデータベースに保存する
+        Contact::create($request->only(['name', 'email', 'tel', 'content']));
 
-        return response('Contact Form');
+        return view('thanks');
     }
 }

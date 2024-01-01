@@ -1,0 +1,1 @@
+<x-app-layout subTitle="お問い合わせありがとうございます"></x-app-layout>
